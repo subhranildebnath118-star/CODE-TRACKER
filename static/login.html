@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Code Tracker | Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#020617;
+  --card:rgba(15,23,42,0.6);
+  --border:rgba(255,255,255,0.08);
+  --text:#e2e8f0;
+  --accent:#06b6d4;
+  --purple:#8b5cf6;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: radial-gradient(circle at top left,#0f172a,#020617);
+  overflow:hidden;
+  color:var(--text);
+}
+
+/* 🔥 FLOATING GLOW BLOBS */
+.blob{
+  position:absolute;
+  width:300px;
+  height:300px;
+  background:linear-gradient(45deg,#06b6d4,#8b5cf6);
+  filter:blur(120px);
+  opacity:0.3;
+  animation:move 10s infinite alternate ease-in-out;
+}
+
+.blob:nth-child(1){
+  top:-50px;
+  left:-50px;
+}
+.blob:nth-child(2){
+  bottom:-50px;
+  right:-50px;
+}
+
+@keyframes move{
+  0%{transform:translate(0,0);}
+  100%{transform:translate(100px,50px);}
+}
+
+/* 🔲 CARD */
+.login-box{
+  width:360px;
+  padding:35px;
+  border-radius:18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  position:relative;
+  z-index:10;
+}
+
+/* TITLE */
+.login-box h2{
+  text-align:center;
+  margin-bottom:25px;
+  background:linear-gradient(90deg,#06b6d4,#8b5cf6);
+  -webkit-background-clip:text;
+  color:transparent;
+  font-weight:600;
+}
+
+/* INPUT */
+.input-group{
+  margin-bottom:15px;
+}
+
+.input-group input{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#1e293b;
+  color:white;
+  outline:none;
+  transition:0.3s;
+}
+
+.input-group input:focus{
+  box-shadow:0 0 0 2px var(--accent);
+}
+
+/* BUTTON */
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+}
+
+/* LOGIN BTN */
+.login-btn{
+  background:linear-gradient(90deg,#06b6d4,#8b5cf6);
+  color:white;
+}
+
+.login-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(6,182,212,0.4);
+}
+
+/* SIGNUP BTN */
+.signup-btn{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+.signup-btn:hover{
+  background:rgba(255,255,255,0.05);
+}
+
+/* MESSAGE */
+.msg{
+  margin-top:12px;
+  text-align:center;
+  font-size:14px;
+  min-height:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="blob"></div>
+<div class="blob"></div>
+
+<div class="login-box">
+  <h2>Code Tracker</h2>
+
+  <div class="input-group">
+    <input type="text" id="username" placeholder="Enter Username">
+  </div>
+
+  <div class="input-group">
+    <input type="password" id="password" placeholder="Enter Password">
+  </div>
+
+  <button class="login-btn" onclick="login()">Login</button>
+  <button class="signup-btn" onclick="signup()">Create Account</button>
+
+  <div class="msg" id="msg"></div>
+</div>
+
+<script>
+    async function login(){
+  let username = document.getElementById("username").value;
+  let password = document.getElementById("password").value;
+
+  let res = await fetch("/login", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({username, password})
+  });
+
+  let data = await res.json();
+
+  if(data.status === "success"){
+    // save user_id
+    localStorage.setItem("user_id", data.user_id);
+
+    // redirect to main app
+    window.location.href = "/";
+  } else {
+    alert("Invalid login");
+  }
+}
+
+const API = "http://127.0.0.1:5000";
+
+/* LOGIN */
+async function login(){
+  let username = document.getElementById("username").value;
+  let password = document.getElementById("password").value;
+
+  let res = await fetch(API + "/login", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({username, password})
+  });
+
+  let data = await res.json();
+
+  if(data.status === "success"){
+    localStorage.setItem("user_id", data.user_id);
+
+    // 🔥 smooth redirect effect
+    document.body.style.opacity = "0";
+    setTimeout(()=>{
+      window.location.href = "/";
+    },500);
+
+  } else {
+    document.getElementById("msg").innerText = "Invalid login ❌";
+  }
+}
+
+/* SIGNUP */
+async function signup(){
+  let username = document.getElementById("username").value;
+  let password = document.getElementById("password").value;
+
+  let res = await fetch(API + "/signup", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({username, password})
+  });
+
+  let data = await res.json();
+
+  if(data.status === "success"){
+    document.getElementById("msg").innerText = "Account created ✅";
+  } else {
+    document.getElementById("msg").innerText = "User already exists ⚠️";
+  }
+}
+
+</script>
+
+</body>
+</html>

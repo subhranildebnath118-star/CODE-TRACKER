@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CodePath | Roadmap Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --bg: #0b1120;
+  --card: rgba(30, 41, 59, 0.55);
+  --border: rgba(255, 255, 255, 0.06);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #06b6d4;
+  --purple: #8b5cf6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+body {
+  background: 
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+    var(--bg);
+  background-size: 40px 40px;
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 🔥 Fixed Mouse Light Effect: Properly layered with pointer-events none */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 250px at var(--x, 50%) var(--y, 50%),
+    rgba(6, 182, 212, 0.15),
+    transparent 60%
+  );
+  z-index: 10;
+}
+
+.navbar-wrapper { padding: 15px 20px; position: relative; z-index: 2; }
+.navbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 26px; background: var(--card);
+  border-radius: 16px; border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+}
+
+select {
+  background: #1e293b; color: white; border: none;
+  padding: 6px 12px; border-radius: 8px; margin-left: 15px; outline: none;
+}
+
+.container { display: flex; padding: 20px; gap: 20px; height: calc(100vh - 90px); position: relative; z-index: 2; }
+
+.sidebar {
+  width: 70px; background: var(--card);
+  border-radius: 16px; border: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: space-between;
+  align-items: center; padding: 20px 0;
+}
+
+.top-icons { display: flex; flex-direction: column; gap: 25px; }
+.icon, .logout {
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0.7; transition: 0.25s; font-size: 18px;
+}
+.icon:hover { color: var(--accent); opacity: 1; }
+.logout:hover { color: #ef4444; opacity: 1; }
+
+.center { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 18px; border-radius: 16px; margin-bottom: 16px;
+  backdrop-filter: blur(4px);
+}
+
+#topics { flex: 1; overflow-y: auto; padding-right: 5px; }
+#topics::-webkit-scrollbar { width: 6px; }
+#topics::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+.topic-header {
+  display: flex; justify-content: space-between;
+  padding: 12px; margin-top: 10px; border-radius: 10px;
+  background: rgba(255,255,255,0.02); cursor: pointer; transition: 0.2s;
+}
+.topic-header:hover { background: rgba(255,255,255,0.05); }
+
+.subtopics { margin-left: 12px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+.sub {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px; margin: 6px 0; border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+}
+
+.right { width: 300px; }
+.circle-box { position: relative; width: 180px; height: 180px; margin: auto; }
+svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
+
+.bg-ring { stroke: #1e293b; stroke-width: 12; fill: none; }
+.progress-ring {
+  stroke: url(#grad); stroke-width: 12; stroke-linecap: round; fill: none;
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.circle-text {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%); text-align: center;
+}
+.circle-text strong { font-size: 22px; }
+
+.small { color: var(--muted); font-size: 12px; }
+.next-topic { font-size: 14px; padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.04); margin-top: 10px; }
+
+/* Auth Styling */
+#loginPage { display: flex; justify-content: center; align-items: center; height: 100vh; position: relative; z-index: 20; }
+.auth-box { background: #1e293b; padding: 30px; border-radius: 12px; width: 300px; border: 1px solid var(--border); }
+.auth-box input { width: 100%; margin-bottom: 10px; padding: 10px; border-radius: 8px; border: none; background: #0b1120; color: white; }
+</style>
+</head>
+<body>
+  
+  <!-- Auth Screen -->
+  <div id="loginPage">
+    <div class="auth-box">
+      <h2 style="text-align:center; margin-bottom:20px;">Login</h2>
+      <input id="username" placeholder="Username">
+      <input id="password" type="password" placeholder="Password">
+      <button onclick="login()" style="width:100%; padding:10px; border:none; border-radius:8px; background:#06b6d4; color:white; cursor:pointer; font-weight:600;">Login</button>
+      <p style="text-align:center; margin-top:10px; font-size:12px;">
+        No account? <span onclick="signup()" style="color:#06b6d4; cursor:pointer;">Signup</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" style="display:none;">
+    <div class="navbar-wrapper">
+      <div class="navbar">
+        <div>
+          <strong style="color:#06b6d4;">CodePath</strong>
+          <select id="language" onchange="changeLanguage()">
+            <option value="Python">Python</option>
+            <option value="Java">Java</option>
+            <option value="C++">C++</option>
+            <option value="JavaScript">JavaScript</option>
+          </select>
+        </div>
+        <div><i class="fa-solid fa-user" style="margin-right:8px;"></i> Subhranil</div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="sidebar">
+        <div class="top-icons">
+          <div class="icon"><i class="fa-solid fa-house"></i></div>
+          <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+          <div class="icon"><i class="fa-solid fa-gear"></i></div>
+        </div>
+        <div class="logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></div>
+      </div>
+
+      <div class="center">
+        <div class="card">
+          <h3 id="title">Python Roadmap</h3>
+          <p id="progressText" class="small">0% completed</p>
+        </div>
+        <div class="card" id="topics"></div>
+      </div>
+
+      <div class="right">
+        <div class="card">
+          <h4>Progress</h4>
+          <div class="circle-box">
+            <svg width="180" height="180">
+              <defs>
+                <linearGradient id="grad">
+                  <stop offset="0%" stop-color="#06b6d4"/>
+                  <stop offset="100%" stop-color="#8b5cf6"/>
+                </linearGradient>
+              </defs>
+              <circle cx="90" cy="90" r="70" class="bg-ring"></circle>
+              <circle cx="90" cy="90" r="70" class="progress-ring" id="ring"></circle>
+            </svg>
+            <div class="circle-text"><strong id="percent">0%</strong></div>
+          </div>
+        </div>
+
+        <div class="card" style="text-align:center;">
+          <h4>Streak</h4>
+          <strong id="streak">0 Days</strong>
+        </div>
+
+        <div class="card">
+          <h4>Next Topic</h4>
+          <div class="next-topic" id="nextTopic">Start your journey</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* MOUSE EFFECT */
+document.addEventListener("mousemove", (e) => {
+  document.body.style.setProperty("--x", e.clientX + "px");
+  document.body.style.setProperty("--y", e.clientY + "px");
+});
+
+let user_id = localStorage.getItem("user_id");
+let currentLang = "Python";
+const API = ""; 
+
+const roadmapData = {
+
+Python: {
+"Phase 1: Basics ": [
+"Install Python & setup VS Code",
+"Learn syntax & indentation",
+"Variables & Data Types",
+"Input / Output",
+"Operators",
+"Conditional Statements (if-else)",
+"Loops (for, while)",
+"Functions",
+"Basic error handling"
+],
+
+"Phase 2: Core Python ": [
+"Lists, Tuples, Sets",
+"Dictionaries",
+"String manipulation",
+"List Comprehensions",
+"Functions (advanced)",
+"Modules & Packages",
+"File Handling",
+"Exception Handling"
+],
+
+"Phase 3: Intermediate": [
+"Object-Oriented Programming (OOP)",
+"Classes & Objects",
+"Inheritance & Polymorphism",
+"Lambda functions",
+"Map, Filter, Reduce",
+"Decorators (basic)",
+"Virtual Environments",
+"Working with APIs"
+],
+
+"Phase 4: Advanced": [
+"Multithreading & Multiprocessing",
+"Async Programming",
+"Generators & Iterators",
+"Logging",
+"Testing (unittest / pytest)",
+"Performance Optimization"
+],
+
+"Phase 5: Web Development": [
+"Flask / Django",
+"REST APIs",
+"Authentication",
+"Deployment"
+],
+
+"Phase 5: Data Science / AI": [
+"NumPy",
+"Pandas",
+"Matplotlib / Seaborn",
+"Machine Learning (scikit-learn)"
+],
+
+"Phase 5: Automation / Scripting": [
+"Web scraping (BeautifulSoup, Selenium)",
+"Task automation",
+"Bots"
+],
+
+"Projects: Beginner ": [
+"Calculator",
+"Number Guessing Game",
+"Password Generator",
+"To-Do List (CLI)",
+"Random Story Generator",
+"Unit Converter",
+"Email Slicer",
+"Dice Simulator",
+"Contact Book",
+"Quiz Game"
+],
+
+"Projects: Intermediate ": [
+"Weather App (API)",
+"Expense Tracker",
+"File Organizer",
+"URL Shortener",
+"Chat Application (CLI)",
+"Web Scraper",
+"Alarm Clock",
+"Music Player",
+"Password Manager",
+"Notes App (GUI - Tkinter)"
+],
+
+"Projects: Advanced ": [
+"Full Stack Web App (Flask/Django)",
+"Blog Website",
+"Chat App with Sockets",
+"AI Chatbot",
+"Stock Price Predictor",
+"Face Recognition System",
+"Automation Bot",
+"Resume Parser",
+"Online Code Editor",
+"SaaS Tool (your own idea)"
+]
+  },
+  Java: { "Basics": ["Syntax", "JVM Structure", "OOP Concepts"], "Advanced": ["Spring Boot", "Hibernate"] },
+  "C++": { "Basics": ["Pointers", "Memory Management", "STL"], "Advanced": ["Templates", "Concurrency"] },
+  JavaScript: { "Basics": ["DOM Manipulation", "ES6+ Syntax", "Fetch API"], "Frameworks": ["React", "Node.js"] }
+};
+
+/* AUTH LOGIC */
+async function login(){
+  let u = document.getElementById("username").value;
+  let p = document.getElementById("password").value;
+  // Mock logic for demo
+  if(u) {
+    user_id = "user_123";
+    localStorage.setItem("user_id", user_id);
+    initApp();
+  }
+}
+
+function logout(){
+  localStorage.removeItem("user_id");
+  location.reload();
+}
+
+function initApp(){
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  load();
+}
+
+/* CORE LOGIC */
+async function load(){
+  let saved = {};
+  try {
+    let res = await fetch(API + "/get-progress", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({user_id, language:currentLang})
+    });
+    let data = await res.json();
+    data.topics.forEach(t => saved[t] = 1);
+  } catch(e) { console.log("Backend offline, using local mode"); }
+
+  renderTopics(saved);
+  updateUI(); // Initial UI update
+}
+
+function renderTopics(saved){
+  let roadmap = roadmapData[currentLang];
+  let html = "";
+  for(let phase in roadmap){
+    html += `
+      <div class="topic-header" onclick="toggle(this)">
+        <span>${phase}</span><span>⌄</span>
+      </div>
+      <div class="subtopics">`;
+    roadmap[phase].forEach(t => {
+      let checked = saved[t] ? "checked" : "";
+      html += `
+        <div class="sub">
+          <span>${t}</span>
+          <input type="checkbox" ${checked} onchange="handleCheck()">
+        </div>`;
+    });
+    html += `</div>`;
+  }
+  document.getElementById("topics").innerHTML = html;
+}
+
+// 🔥 FIXED: handleCheck updates the progress ring without re-rendering the whole list
+async function handleCheck(){
+  let saved = [];
+  document.querySelectorAll("input[type=checkbox]").forEach(cb => {
+    if(cb.checked) saved.push(cb.parentElement.querySelector("span").innerText);
+  });
+
+  // Update UI immediately for responsiveness
+  updateUI();
+
+  // Send to server in background
+  try {
+    await fetch(API + "/save-progress", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({user_id, language:currentLang, topics:saved})
+    });
+  } catch(e) {}
+}
+
+function updateUI(){
+  const roadmap = roadmapData[currentLang];
+  const allTopics = Object.values(roadmap).flat();
+  const checkboxes = document.querySelectorAll("input[type=checkbox]");
+  
+  let doneCount = 0;
+  let firstMissing = "🎉 All done!";
+  let foundMissing = false;
+
+  checkboxes.forEach(cb => {
+    if(cb.checked) doneCount++;
+    else if(!foundMissing) {
+      firstMissing = cb.parentElement.querySelector("span").innerText;
+      foundMissing = true;
+    }
+  });
+
+  let percent = allTopics.length === 0 ? 0 : Math.round((doneCount / allTopics.length) * 100);
+
+  document.getElementById("progressText").innerText = `${percent}% completed`;
+  document.getElementById("percent").innerText = `${percent}%`;
+  document.getElementById("nextTopic").innerText = firstMissing;
+
+  const circ = 2 * Math.PI * 70;
+  const ring = document.getElementById("ring");
+  ring.style.strokeDasharray = circ;
+  ring.style.strokeDashoffset = circ - (percent / 100) * circ;
+}
+
+function toggle(el){
+  let sub = el.nextElementSibling;
+  if (sub.style.maxHeight && sub.style.maxHeight !== "0px") {
+    sub.style.maxHeight = "0px";
+  } else {
+    sub.style.maxHeight = sub.scrollHeight + "px";
+  }
+}
+
+function changeLanguage(){
+  currentLang = document.getElementById("language").value;
+  document.getElementById("title").innerText = currentLang + " Roadmap";
+  load();
+}
+
+window.onload = () => {
+  if(localStorage.getItem("user_id")) initApp();
+};
+</script>
+</body>
+</html>

@@ -30,16 +30,6 @@ Frontend	HTML, CSS, JavaScript
 Backend	Flask (Python)
 Database	SQLite
 
-Folder Structure:
-code-tracker/
-│── app.py
-│── database.db
-│
-├── static/
-│   ├── ui.html
-│   └── login.html
-│
-└── README.md
 
 Setup Instructions:
 1. Clone the Repository

@@ -21,7 +21,7 @@
 
 ---
 
-### 🛠️ Technology Stack
+### Technology Stack
 
 | Layer | Technology | Purpose |
 | --- | --- | --- |
@@ -72,7 +72,7 @@ http://127.0.0.1:5000
 
 ---
 
-### 🚧 Future Roadmap & Enhancements
+### Future Roadmap & Enhancements
 
 * **Cloud Deployment:** Migration to production infrastructure using platforms like Render or Railway.
 * **Advanced Authentication:** Implementation of industry-standard JWT (JSON Web Tokens) or OAuth2 protocols.

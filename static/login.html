@@ -1,247 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Code Tracker | Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Code Tracker | Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #020617;
+      --card: rgba(15, 23, 42, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e2e8f0;
+      --accent: #06b6d4;
+      --purple: #8b5cf6;
+    }
 
-<style>
-:root{
-  --bg:#020617;
-  --card:rgba(15,23,42,0.6);
-  --border:rgba(255,255,255,0.08);
-  --text:#e2e8f0;
-  --accent:#06b6d4;
-  --purple:#8b5cf6;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Inter',sans-serif;
-}
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      color: var(--text);
+      overflow: hidden;
+    }
 
-body{
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background: radial-gradient(circle at top left,#0f172a,#020617);
-  overflow:hidden;
-  color:var(--text);
-}
+    .blob {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(45deg, #06b6d4, #8b5cf6);
+      filter: blur(120px);
+      opacity: 0.25;
+      animation: move 12s infinite alternate ease-in-out;
+    }
 
-/* 🔥 FLOATING GLOW BLOBS */
-.blob{
-  position:absolute;
-  width:300px;
-  height:300px;
-  background:linear-gradient(45deg,#06b6d4,#8b5cf6);
-  filter:blur(120px);
-  opacity:0.3;
-  animation:move 10s infinite alternate ease-in-out;
-}
+    .blob:nth-child(1) { top: -60px; left: -60px; }
+    .blob:nth-child(2) { bottom: -60px; right: -60px; }
 
-.blob:nth-child(1){
-  top:-50px;
-  left:-50px;
-}
-.blob:nth-child(2){
-  bottom:-50px;
-  right:-50px;
-}
+    @keyframes move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(80px, 40px); }
+    }
 
-@keyframes move{
-  0%{transform:translate(0,0);}
-  100%{transform:translate(100px,50px);}
-}
+    .login-box {
+      width: 360px;
+      padding: 36px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 10;
+    }
 
-/* 🔲 CARD */
-.login-box{
-  width:360px;
-  padding:35px;
-  border-radius:18px;
-  background:var(--card);
-  border:1px solid var(--border);
-  backdrop-filter:blur(20px);
-  box-shadow:0 20px 60px rgba(0,0,0,0.6);
-  position:relative;
-  z-index:10;
-}
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 28px;
+      background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 600;
+      font-size: 24px;
+    }
 
-/* TITLE */
-.login-box h2{
-  text-align:center;
-  margin-bottom:25px;
-  background:linear-gradient(90deg,#06b6d4,#8b5cf6);
-  -webkit-background-clip:text;
-  color:transparent;
-  font-weight:600;
-}
+    .input-group {
+      margin-bottom: 16px;
+    }
 
-/* INPUT */
-.input-group{
-  margin-bottom:15px;
-}
+    .input-group input {
+      width: 100%;
+      padding: 13px 14px;
+      border: none;
+      border-radius: 10px;
+      background: #1e293b;
+      color: white;
+      outline: none;
+      font-size: 14px;
+      transition: 0.25s;
+    }
 
-.input-group input{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:#1e293b;
-  color:white;
-  outline:none;
-  transition:0.3s;
-}
+    .input-group input:focus {
+      box-shadow: 0 0 0 2px var(--accent);
+    }
 
-.input-group input:focus{
-  box-shadow:0 0 0 2px var(--accent);
-}
+    button {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      font-size: 14px;
+      transition: 0.25s;
+    }
 
-/* BUTTON */
-button{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  font-weight:600;
-  cursor:pointer;
-  margin-top:10px;
-  transition:0.3s;
-}
+    .login-btn {
+      background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+      color: white;
+    }
 
-/* LOGIN BTN */
-.login-btn{
-  background:linear-gradient(90deg,#06b6d4,#8b5cf6);
-  color:white;
-}
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(6, 182, 212, 0.35);
+    }
 
-.login-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 25px rgba(6,182,212,0.4);
-}
+    .signup-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
 
-/* SIGNUP BTN */
-.signup-btn{
-  background:transparent;
-  border:1px solid var(--border);
-  color:var(--text);
-}
+    .signup-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
 
-.signup-btn:hover{
-  background:rgba(255,255,255,0.05);
-}
+    .msg {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 13px;
+      min-height: 20px;
+      color: #94a3b8;
+    }
 
-/* MESSAGE */
-.msg{
-  margin-top:12px;
-  text-align:center;
-  font-size:14px;
-  min-height:18px;
-}
-</style>
+    .msg.error { color: #f87171; }
+    .msg.success { color: #34d399; }
+  </style>
 </head>
-
 <body>
 
-<div class="blob"></div>
-<div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
 
-<div class="login-box">
-  <h2>Code Tracker</h2>
+  <div class="login-box">
+    <h2>Code Tracker</h2>
 
-  <div class="input-group">
-    <input type="text" id="username" placeholder="Enter Username">
+    <div class="input-group">
+      <input type="text" id="username" placeholder="Username" autocomplete="username">
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+    </div>
+
+    <button class="login-btn" onclick="login()">Login</button>
+    <button class="signup-btn" onclick="signup()">Create Account</button>
+
+    <div class="msg" id="msg"></div>
   </div>
 
-  <div class="input-group">
-    <input type="password" id="password" placeholder="Enter Password">
-  </div>
+  <script>
+    function showMsg(text, type = "") {
+      const el = document.getElementById("msg");
+      el.innerText = text;
+      el.className = "msg " + type;
+    }
 
-  <button class="login-btn" onclick="login()">Login</button>
-  <button class="signup-btn" onclick="signup()">Create Account</button>
+    async function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-  <div class="msg" id="msg"></div>
-</div>
+      if (!username || !password) {
+        showMsg("Please enter username and password", "error");
+        return;
+      }
 
-<script>
-    async function login(){
-  let username = document.getElementById("username").value;
-  let password = document.getElementById("password").value;
+      try {
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
 
-  let res = await fetch("/login", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({username, password})
-  });
+        const data = await res.json();
 
-  let data = await res.json();
+        if (data.status === "success") {
+          localStorage.setItem("user_id", data.user_id);
+          localStorage.setItem("username", data.username || username);
+          showMsg("Login successful ✓", "success");
+          
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 600);
+        } else {
+          showMsg(data.message || "Invalid login", "error");
+        }
+      } catch (err) {
+        showMsg("Server not running. Start the Flask app.", "error");
+      }
+    }
 
-  if(data.status === "success"){
-    // save user_id
-    localStorage.setItem("user_id", data.user_id);
+    async function signup() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-    // redirect to main app
-    window.location.href = "/";
-  } else {
-    alert("Invalid login");
-  }
-}
+      if (!username || !password) {
+        showMsg("Please enter username and password", "error");
+        return;
+      }
 
-const API = "http://127.0.0.1:5000";
+      if (password.length < 4) {
+        showMsg("Password must be at least 4 characters", "error");
+        return;
+      }
 
-/* LOGIN */
-async function login(){
-  let username = document.getElementById("username").value;
-  let password = document.getElementById("password").value;
+      try {
+        const res = await fetch("/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
 
-  let res = await fetch(API + "/login", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({username, password})
-  });
+        const data = await res.json();
 
-  let data = await res.json();
+        if (data.status === "success") {
+          showMsg("Account created! You can login now.", "success");
+        } else {
+          showMsg(data.message || "Signup failed", "error");
+        }
+      } catch (err) {
+        showMsg("Server not running. Start the Flask app.", "error");
+      }
+    }
 
-  if(data.status === "success"){
-    localStorage.setItem("user_id", data.user_id);
-
-    // 🔥 smooth redirect effect
-    document.body.style.opacity = "0";
-    setTimeout(()=>{
-      window.location.href = "/";
-    },500);
-
-  } else {
-    document.getElementById("msg").innerText = "Invalid login ❌";
-  }
-}
-
-/* SIGNUP */
-async function signup(){
-  let username = document.getElementById("username").value;
-  let password = document.getElementById("password").value;
-
-  let res = await fetch(API + "/signup", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({username, password})
-  });
-
-  let data = await res.json();
-
-  if(data.status === "success"){
-    document.getElementById("msg").innerText = "Account created ✅";
-  } else {
-    document.getElementById("msg").innerText = "User already exists ⚠️";
-  }
-}
-
-</script>
+    // Allow Enter key to login
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") login();
+    });
+  </script>
 
 </body>
 </html>
